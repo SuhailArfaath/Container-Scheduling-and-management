@@ -46,6 +46,7 @@ $user_data = check_login($con);
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><a class="dropdown-item" href="received_orders.php">Shipping</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -95,7 +96,7 @@ $user_data = check_login($con);
     <div class="row justify-content-center mt-5">
         <div class="col-6">
             <h1 class="display-4 fs-2 text-center"><b>Container Management System</b></h1>
-            <h3 class="display-6 fs-2 text-center mt-5">Better container management, better commerce</p>
+            <h3 class="display-6 fs-2 text-center mt-5">Better container management. Better commerce.</p>
             <hr/>
             <div class="row justify-content-center">
                 <div class="col-8 mt-4">
