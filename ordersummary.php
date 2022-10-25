@@ -5,49 +5,75 @@ include("connection.php");
 include("functions.php");
 
 $user_data = check_login($con);
+
 $user_id = $user_data['user_id'];
 
+$warehouse_data = [];
+$query = "select * from warehouses";
 
-if($_SERVER['REQUEST_METHOD'] == "GET")
+$result = mysqli_query($con, $query);
+// print_r( $result);
+
+if($result)
 {
-    // When the user clicks on the create account button
-   
-    
-
-        // Reading from the data base
-        $query = "select * from orders where user_id = '{$user_id}'";
-
-        $result = mysqli_query($con, $query);
-        // print_r( $result);
-
-        if($result)
-        {
-            if($result && mysqli_num_rows($result) > 0)
-            {
-                $orders_data = mysqli_fetch_all($result);
-            }
-        }
-    
-    else{
-        echo "problem in getting data";
+    if($result && mysqli_num_rows($result) > 0)
+    {
+        $warehouse_data = mysqli_fetch_all($result);
+        // print_r($warehouse_data);
     }
-
 }
 
+else{
+echo "problem in getting data";
+}
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {
-  echo "Posted!";
-  $order_id = (int)$_POST['order_id'];
-  // echo $order_id;
-  // Deleting the order from the data base
-  $query = "delete from orders where order_id = '{$order_id}'";
-  // $query = "delete from orders where order_id = 9";
+    // When the user clicks on the submit button
+    $product_data = $_POST;
+    // var_dump($product_data['total']);
+    // var_dump($product_data['quantity']);
 
-  mysqli_query($con, $query);
+    $quantity = $product_data['quantity'];
 
-  header("Location: myorders.php");
-  die;
+    // echo $product_data;
+    // $product_data = $_POST['total'];
+    // $decoded_json = json_decode($product_data);
+    // echo gettype($product_data);
+    $real_data = json_decode($product_data['total'],true);
+    // echo $real_data[0]['product_id'] ;
+    print_r($real_data);
+
+
+    for ($x = 0; $x < count($real_data); $x++) {
+        
+        $id = $real_data[$x]['product_id'];
+        $name = $real_data[$x]['product_name'];
+        $brand = $real_data[$x]['product_brand'];
+        $type = $real_data[$x]['product_type'];
+        // $quantity = $real_data[$x]['quantity'];
+        $exporter_id = $real_data[$x]['exporter_id'];
+        $exporter_name = $real_data[$x]['exporter_name'];
+        $warehouseId = $real_data[$x]['warehouseId'];
+        // echo $real_data[$x]['product_id'];
+        $query = "insert into orders (user_id,product_id,product_name,product_brand,product_type,quantity,exporter_id,exporter_name,warehouseId) values ('{$user_id}','{$id}','{$name}','{$brand}','{$type}','{$quantity}','{$exporter_id}','{$exporter_name}','{$warehouseId}')";
+
+        mysqli_query($con, $query);
+        
+          
+      }
+    // $query = "insert into products (product_name,product_brand,product_type,quantity) values ('$product_name','$brand','$type','$product_barcode','$product_weight','$product_image')";
+
+    // mysqli_query($con, $query);
+    header("Location: test.php");
+    die;
+    
+
+
+    // header("Location: index.php");
+    // die;
 }
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -159,118 +185,139 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             <h1 class="display-4 fs-2 text-center"><b>Container Management System</b></h1>
         </div>
     </div>
-  
+    
+      <script>
+        var data = [];
+        function postData()
+        {
+
+            var quantity = document.getElementsByName("quantity").value;
+            var warehouseId = document.getElementById("checkbox").value;
+            var poster = document.getElementById("poster");
+
+            data[0]['quantity'] = quantity;
+            data[0]['warehouseId'] = warehouseId;
+            a = {}
+            // for (let i = 0; i < data.length; i++) {
+
+            // }
+            var poster = document.getElementById("poster");
+            data_items = localStorage.length;
+            for (let i = 0; i < data_items; i++) {
+                    a[i]  = data[i];
+            }
+            // a.push({ 'quantity': quantity, 'warehouseId': warehouseId });
+            console.log("Hello");
+            console.log(a,quantity,warehouseId);
+            poster.value = JSON.stringify(a);
+            localStorage.clear();
+
+            // poster.value = "hello";
+
+            // window.location.href = "checkout.php?data=" + data; 
+        }
+
+        function showData()
+        {
+            data_items = localStorage.length;
+            // data = []
+            for (let i = 0; i < data_items; i++) {
+                var key = localStorage.key( i )
+                data[i] = JSON.parse(localStorage.getItem(key))
+            }
+            // localStorage.setItem("lastname", "Smith");
+            // var key = localStorage.key( 0 )
+            
+            console.log(data[0]);
+
+            var table = document.getElementById("data_table");
+            for (let j = 0; j < data.length; j++) {
+               var row = table.insertRow();
+               cell1  = row.insertCell();
+               cell2  = row.insertCell();
+               cell3  = row.insertCell();
+               cell4  = row.insertCell();
+
+               cell1.innerHTML = data[j]["product_id"];
+               cell2.innerHTML = data[j]["product_name"];
+               cell3.innerHTML = data[j]["price"];
+               cell4.innerHTML = data[j]["exporter_name"];
+            }
+            // console.log(JSON.stringify(data));
+            // postData();
+        }
+      </script>
   
       
+      <h1 class="display-2 fs-3 ">Order summary</h1>
+      <div class="row justify-content-center mt-4">
+            <div class="col-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Product Id</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Exporter Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data_table">
+                        
+                    </tbody >
+                </table>
+            </div>
+    </div>
 
-      <div class="row mt-4">
-          <h1 class="display-4 fs-3 "><b>Your orders</b></h1>  
-          <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Order_id</th>
-                <th scope="col">Product_name</th>
-                <th scope="col">Product_brand</th>
-                <th scope="col">Product_type</th>
-                <th scope="col">Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php for ($row = 0; $row < count($orders_data); $row++) {?>
-              <tr>
-                <th scope="row"><?php echo $orders_data[$row][0] ?></th>
-                <td><?php echo $orders_data[$row][3] ?></td>
-                <td><?php echo $orders_data[$row][4] ?></td>
-                <td><?php echo $orders_data[$row][5] ?></td>
-                <td><?php echo $orders_data[$row][6] ?></td>
-                <td>
-                  <div class="row">
-                    <div class="col-4">
-                    <form action= "edit_order.php" method = "post">
-                      <input type="hidden"  name="order_id" value="<?php echo $orders_data[$row][0]; ?>"/>
-                        <button type="submit" class="btn btn-success">
-                          Edit
-                        </button>
-                    </form>
-                    </div>
-                    <div class="col-4">
-                    <form action= "myorders.php" method = "post">
-                      <input type="hidden"  name="order_id" value="<?php echo $orders_data[$row][0]; ?>"/>
-                      <button type="submit" class="btn btn-danger">
-                        Delete
-                      </button>
-                    </form>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-              <?php } ?>
-            </tbody>
-          </table>     
-      </div>
-      <footer class="footer">
-        <div class=" text-center bg-light">
-          <a href="index.php">
-              <button class="btn btn-warning  m-2" type="button">Back</button>
-          </a>
+    <div class="row justify-content-center">
+        <div class="col-2">
+                <p class="text-right"> Enter quantity: </p>
         </div>
-      </footer>
+        <div class="col-1 text-left">
+            <form method = "post">
+                <input type="text" class="form-control" id="exampleFormControlInput1" name = "quantity" id = "quantity">
+        </div>
+    </div>
+    <div class="row justify-content-center mt-2">
+        <div class="col-6">
+                <p> Choose delivery address: </p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-6">
+        <table class="table table-image">
+                <tbody>
+                    <?php for ($row = 0; $row < count($warehouse_data); $row++) { ?>
+                    <tr>
+                        <td class="text-center">
+                        <input class="text-center form-check-input" type="checkbox" value="<?php echo $warehouse_data[$row][0]; ?>"  id="checkbox" name="check_box">
+                        </td>                    
+                        <td class="text-left">
+                            <p><?php echo $warehouse_data[$row][2]; ?></p>
+                            <p> <b>Address:</b> <?php echo $warehouse_data[$row][6]; ?></p>
+                        </td>
+                    
+                    </tr>
+                    <?php }?>
+                </tbody>
+                </table>
+        </div>
+    </div>
       <script>
-        var check = 1;
-        function add_to_cart(product_id,product_name,
-                            product_brand,product_type)
-        {
-          if (check == 1)
-          {
-            localStorage.clear();
-            check = 2;
-          }
-          console.log(product_id,product_name,
-                            product_brand,product_type);
-
-        var quantity = parseInt(document.getElementById(String(product_id)).innerHTML);
-        console.log(quantity)
-        var product_data = {
-        "product_id"    : product_id,
-        "product_name"  : product_name,
-        "product_brand" : product_brand,
-        "product_type"  : product_type,
-        "quantity"      : quantity
-        }
-
-        data = JSON.stringify(product_data);
-        // data = JSON.parse(data_crude);
-
-         localStorage.setItem(product_id, data);
-        //  console.log(JSON.parse(localStorage.getItem(7)));
-        }
-
-
-        function quantity_counter(operation,element_id)
-        {
-          // localStorage.clear();
-          // var i = localStorage.getItem(6);
-          // var obj = JSON.stringify(i);
-          // alert(JSON.stringify(i));
-          // console.log(obj);
-          value = parseInt(document.getElementById(String(element_id)).innerHTML);
-          if (operation > 0)
-          {
-            document.getElementById(String(element_id)).innerHTML = value + 1;
-          }
-          else
-          {
-            if(value > 0)
-            document.getElementById(String(element_id)).innerHTML = value - 1;
-            else
-            {
-              document.getElementById(String(element_id)).innerHTML = value;
-            }
-          }
-          
-        }
-        </script>
+        showData();
+        // postData();
+      </script>
+      
+        <input type="hidden" name="total" id="poster" value="abc"/>
+        <footer class="footer">
+            <div class=" text-center bg-light">
+            <a href="index.php">
+                <button class="btn btn-success  m-2" onclick="postData()" type="submit">Place order</button>
+            </a>
+            </div>
+        </footer>
+    </form>
+      
+        
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   </body>
 </html>
-

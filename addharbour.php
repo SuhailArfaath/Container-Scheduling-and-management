@@ -3,33 +3,36 @@ session_start();
 
 include("connection.php");
 include("functions.php");
-
 $user_data = check_login($con);
-
-if($_SERVER['REQUEST_METHOD'] == "GET")
+if($_SERVER['REQUEST_METHOD'] == "POST")
 {
+    // When the user clicks on the create account button
+    $harborName = $_POST['harbourName'];
+    $country  = $_POST['country'];
+    $address = $_POST['address'];
+    $telephone = $_POST['telephone'];
 
-        // Reading from the products table in the data base
-        $query = "select * from products";
-
-        $result = mysqli_query($con, $query);
-
-        if($result)
+    if((!empty($harborName)) && (!empty($country)) && (!empty($address))&&
+            (!empty($telephone)))
         {
-            if($result && mysqli_num_rows($result) > 0)
-            {
-                $products_data = mysqli_fetch_all($result);
-            }
+
+            // Saving to data base
+            $query = "insert into harbors (harborName,country,address,telephone) values ('$harborName','$country','$address','$telephone')";
+
+            mysqli_query($con, $query);
+            // echo '<script>alert("Please enter valid information!")</script>';
+
+            header("Location: addharbour.php");
+            die;
         }
-    
-    else{
-        echo "problem in getting data";
-    }
+        else{
+            echo '<script>alert("Please enter valid information!")</script>';
+            
+        }
 
 }
-
-
 ?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -37,22 +40,6 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link href="product_display.css" rel="stylesheet">
-    <style>
-        .container {
-            padding: 2rem 0rem;
-        }
-
-        h4 {
-            margin: 2rem 0rem 1rem;
-        }
-
-        .table-image {
-            td, th {
-                vertical-align: middle;
-            }
-        }
-    </style>
   </head>
   <body>
   <div class="container-fluid">
@@ -150,130 +137,49 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
             </div>
         </div>
     </nav>
-    
+</div>
+    <div class="container mt-5">
+        <div class="row justify-content-center mt-5">
+            <div class="col-6">
+                <img src="harbor.jpg" class="img-fluid" alt="Responsive image">
+                
+                    <ul>
+                        <li><p class="mt-4"> Fill the details to add a harbour to the database</p> </li>
+                    </ul>
+            </div>
+            <div class="col-6">
+                <div class="card p-2">
+                    <div class="card-body"> 
+                       <form method = "post">
+                            <div class="mb-4">
+                                <label for="exampleFormControlInput1" class="form-label">Harbour Name</label>
+                                <input type="text" class="form-control" id="exampleFormControlInput1" name = "harbourName">
+                            </div>
 
-    <div class="row justify-content-center mt-1 mb-2">
-        <div class="col-6">
-            <form class="d-flex" role="search" action="searchresult.php" method="post">
-                <input class="form-control me-2" name="product_name" id="product_name" type="search" placeholder="Search by product name" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>        
-        </div>
-    </div>
-      
-    <div class="row justify-content-center mt-1">
-        <div class="col-6">
-            <h1 class="display-4 fs-2 text-center"><b>Product list</b></h1>
-        </div>
-    </div>
-  
-    
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <table class="table table-image">
-                <thead>
-                    <tr>
-                    <th scope="col" class="text-center">Product Id</th>
-                    <th scope="col" class="text-center">Product image</th>
-                    <th scope="col" class="text-center">Product name</th>
-                    <th scope="col" class="text-center">Product type</th>
-                    <th scope="col" class="text-center">Stock left</th>
-                    <th scope="col" class="text-center">Price</th>
-                    <th scope="col" class="text-center">Exporter name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php for ($row = 0; $row < count($products_data); $row++) { ?>
-                    <tr>
-                    <th scope="row" class="text-center"><?php echo $products_data[$row][0]; ?></th>
-                    <td class="w-25 text-center">
-                        <img class="img" src="data:image/png;charset=utf8;base64,<?php echo base64_encode($products_data[$row][6]); ?>" width = "150px" height="150px">
-                    </td>
-                    <td class="text-center"><?php echo $products_data[$row][1]; ?></td>
-                    <td class="text-center"><?php echo $products_data[$row][3]; ?></td>
-                    <td class="text-center"><?php echo $products_data[$row][7]; ?></td>
-                    <td class="text-center"><?php echo "$",$products_data[$row][8]; ?></td>
-                    <td class="text-center"><?php echo $products_data[$row][10]; ?></td>
-                    </tr>
-                    <?php }?>
-                </tbody>
-                </table>   
+                            <div class="mb-4">
+                                <label for="exampleFormControlInput1" class="form-label">Country</label>
+                                <input type="text" class="form-control" id="exampleFormControlInput1" name = "country">
+                            </div>
+            
+                            <div class="mb-4">
+                                <label for="exampleFormControlInput1" class="form-label">Address</label>
+                                <textarea class="form-control" id = "Address" name = "address" rows="2"></textarea>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="exampleFormControlInput1" class="form-label">Telephone</label>
+                                <input type="text" class="form-control" id="exampleFormControlInput1" name = "telephone">
+                            </div>
+            
+                            <button type="submit" class="btn btn-primary">Add harbor</button>
+                        </form>
+                    </div>
+
+                  </div>
             </div>
         </div>
+        
     </div>
-
-
-
-
-
-
-
-
-
-
-
-      
-      
-      <script>
-        var check = 1;
-        function add_to_cart(product_id,product_name,
-                            product_brand,product_type,
-                            exporter_id,exporter_name)
-        {
-          if (check == 1)
-          {
-            localStorage.clear();
-            check = 2;
-          }
-          console.log(product_id,product_name,
-                            product_brand,product_type);
-
-        var quantity = parseInt(document.getElementById(String(product_id)).innerHTML);
-        console.log(quantity)
-        var product_data = {
-        "product_id"    : product_id,
-        "product_name"  : product_name,
-        "product_brand" : product_brand,
-        "product_type"  : product_type,
-        "quantity"      : quantity,
-        "exporter_id"   : exporter_id,
-        "exporter_name" : exporter_name
-        }
-
-        data = JSON.stringify(product_data);
-        // data = JSON.parse(data_crude);
-
-         localStorage.setItem(product_id, data);
-        //  console.log(JSON.parse(localStorage.getItem(7)));
-        }
-
-
-        function quantity_counter(operation,element_id)
-        {
-          // localStorage.clear();
-          // var i = localStorage.getItem(6);
-          // var obj = JSON.stringify(i);
-          // alert(JSON.stringify(i));
-          // console.log(obj);
-          value = parseInt(document.getElementById(String(element_id)).innerHTML);
-          if (operation > 0)
-          {
-            document.getElementById(String(element_id)).innerHTML = value + 1;
-          }
-          else
-          {
-            if(value > 0)
-            document.getElementById(String(element_id)).innerHTML = value - 1;
-            else
-            {
-              document.getElementById(String(element_id)).innerHTML = value;
-            }
-          }
-          
-        }
-        </script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   </body>
 </html>
-

@@ -55,7 +55,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
     </style>
   </head>
   <body>
-  <div class="container-fluid">
+    <div class="container-fluid">
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">C S M</a>
@@ -73,11 +73,9 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
                         Importer
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="test.php">Place order</a></li>
+                        <li><a class="dropdown-item" href="products.php">Place order</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="myorders.php">My orders</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="addwarehouse.php">Add warehouse</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -86,8 +84,6 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -97,7 +93,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="addproducts.php">Add products</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="allproducts.php">View all products</a></li>
+                        <li><a class="dropdown-item" href="products.php">View all products</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -108,35 +104,6 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
                         <li><a class="dropdown-item" href="addusers.php">Add users</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="viewusers.php">View all users</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="add_harbor_stock.php">Add stock</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="addharbour.php">Add a harbor</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Orders
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="index.php">Truck shipping order</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Manufacturer
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="man_received_orders.php">Export orders</a></li>
                     </ul>
                 </li>
             </ul>
@@ -150,86 +117,46 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
             </div>
         </div>
     </nav>
-    
-
-    <div class="row justify-content-center mt-1 mb-2">
-        <div class="col-6">
-            <form class="d-flex" role="search" action="searchresult.php" method="post">
-                <input class="form-control me-2" name="product_name" id="product_name" type="search" placeholder="Search by product name" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>        
-        </div>
-    </div>
       
     <div class="row justify-content-center mt-1">
         <div class="col-6">
-            <h1 class="display-4 fs-2 text-center"><b>Product list</b></h1>
+            <h1 class="display-4 fs-2 text-center"><b>Order products</b></h1>
         </div>
     </div>
   
     
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
-                <table class="table table-image">
-                <thead>
-                    <tr>
-                    <th scope="col" class="text-center">Product Id</th>
-                    <th scope="col" class="text-center">Product image</th>
-                    <th scope="col" class="text-center">Product name</th>
-                    <th scope="col" class="text-center">Product type</th>
-                    <th scope="col" class="text-center">Stock left</th>
-                    <th scope="col" class="text-center">Price</th>
-                    <th scope="col" class="text-center">Exporter name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php for ($row = 0; $row < count($products_data); $row++) { ?>
-                    <tr>
-                    <th scope="row" class="text-center"><?php echo $products_data[$row][0]; ?></th>
-                    <td class="w-25 text-center">
-                        <img class="img" src="data:image/png;charset=utf8;base64,<?php echo base64_encode($products_data[$row][6]); ?>" width = "150px" height="150px">
-                    </td>
-                    <td class="text-center"><?php echo $products_data[$row][1]; ?></td>
-                    <td class="text-center"><?php echo $products_data[$row][3]; ?></td>
-                    <td class="text-center"><?php echo $products_data[$row][7]; ?></td>
-                    <td class="text-center"><?php echo "$",$products_data[$row][8]; ?></td>
-                    <td class="text-center"><?php echo $products_data[$row][10]; ?></td>
-                    </tr>
-                    <?php }?>
-                </tbody>
-                </table>   
+            <div class="col-5">
+            
+            
             </div>
+            <div class="col-7">
+            
+            
+            </div>
+            
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-      
       
       <script>
         var check = 1;
+        
         function add_to_cart(product_id,product_name,
                             product_brand,product_type,
                             exporter_id,exporter_name)
         {
+          var quantity = parseInt(document.getElementById("quantity").value);
           if (check == 1)
           {
             localStorage.clear();
             check = 2;
           }
           console.log(product_id,product_name,
-                            product_brand,product_type);
+                            product_brand,product_type,exporter_id,exporter_name);
 
-        var quantity = parseInt(document.getElementById(String(product_id)).innerHTML);
+        
         console.log(quantity)
         var product_data = {
         "product_id"    : product_id,
@@ -240,39 +167,15 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
         "exporter_id"   : exporter_id,
         "exporter_name" : exporter_name
         }
-
+        console.log(product_data)
         data = JSON.stringify(product_data);
         // data = JSON.parse(data_crude);
 
          localStorage.setItem(product_id, data);
-        //  console.log(JSON.parse(localStorage.getItem(7)));
+         console.log(data);
         }
 
-
-        function quantity_counter(operation,element_id)
-        {
-          // localStorage.clear();
-          // var i = localStorage.getItem(6);
-          // var obj = JSON.stringify(i);
-          // alert(JSON.stringify(i));
-          // console.log(obj);
-          value = parseInt(document.getElementById(String(element_id)).innerHTML);
-          if (operation > 0)
-          {
-            document.getElementById(String(element_id)).innerHTML = value + 1;
-          }
-          else
-          {
-            if(value > 0)
-            document.getElementById(String(element_id)).innerHTML = value - 1;
-            else
-            {
-              document.getElementById(String(element_id)).innerHTML = value;
-            }
-          }
-          
-        }
-        </script>
+      </script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   </body>
 </html>

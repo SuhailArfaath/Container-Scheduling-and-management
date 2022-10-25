@@ -9,26 +9,22 @@ session_start();
     if($_SERVER['REQUEST_METHOD'] == "POST")
     {
         // When the user clicks on the submit button
-        $user_name     = $_POST['username'];
-        $password      = $_POST['password'];
-        $password      = md5($password);
-        $user_company  = $_POST['user_company_name'];
-        $account_type  = $_POST['account_type'];
-        $address       = $_POST['user_company_address'];
-        $status        = "active";
-        $contact_number= $_POST['user_contact_number'];
+        $name     = $_POST['name'];
+        $emailId      = $_POST['emailId'];
+        $contact_name  = $_POST['contact_name'];
+        $warehouse_address = $_POST['warehouse_address'];
+        $contact_number= $_POST['contact_number'];
+        $user_id = $user_data['user_id'];
 
-        if((!empty($user_name)) && (!empty($password)) && (!empty($user_company))&&
-            (!empty($account_type))&& (!empty($address))&&(!empty($status))&&
-            (!empty($contact_number)))
+        if((!empty($name)) && (!empty($emailId)) && (!empty($contact_name))&&
+            (!empty($warehouse_address))&& (!empty($contact_number)))
         {
-
             // Saving to data base
-            $query = "insert into users (user_name,password,user_company,account_type,address,status,contact_number) values ('$user_name','$password','$user_company','$account_type','$address','$status','$contact_number')";
+            $query = "insert into warehouses (Company_Id,name,emailId,contact_name,contact_number,warehouse_address) values ('$user_id','$name','$emailId','$contact_name','$contact_number','$warehouse_address')";
 
             mysqli_query($con, $query);
 
-            header("Location: login.php");
+            header("Location: index.php");
             die;
         }
         else{
@@ -154,48 +150,28 @@ session_start();
                     <div class="card-body"> 
                        <form method = "post">
                             <div class="mb-4">
-                                <input type="email" class="form-control"  id = "username" name = "username"  placeholder="Create your username">
-                            </div>
-            
-                            <div class="mb-4">
-                                <input type="password" class="form-control" id = "password" name = "password" placeholder="Create your password">
-                            </div>
-
-                            <div class="mb-2">
                                 
-                                <div class="row">
-                                    <div class="col-4">
-                                        <p> What type of account is this? </p>
-                                    </div>
-                                    <div class="col-4">
-                                        <input class="form-check-input" id = "exporter" type="checkbox" name="account_type" onclick="setexport()" value="Exporter">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Exporter Account
-                                        </label>
-                                    </div>
-                                    <div class="col-4">
-                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="Importer">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Importer Account
-                                        </label>
-                                    </div>
-                                </div>
-                                                            
+                                <input type="text" class="form-control"  id = "name" name = "name"  placeholder="Create the warehouse name">
+                            </div>
+                            <div class="mb-4">
+                                <input type="email" class="form-control" id = "emailId" name = "emailId" placeholder="Create email Id">
                             </div>
 
+                           
+
                             <div class="mb-4">
-                                <input type="text" class="form-control" id = "user_company_name" name = "user_company_name" placeholder="Enter your company name">
+                                <input type="text" class="form-control" id = "contact_name" name = "contact_name" placeholder="Enter the name of point of contact">
                             </div>
 
                             <div class="mb-4">
                                 <div class="row">
                                     <div class="col-4">
-                                        <p class="text-left"> Enter your company's address </p>
+                                        <p class="text-left"> Enter your warehouse address </p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <textarea class="form-control" id = "user_company_address" name = "user_company_address" rows="3"></textarea>
+                                        <textarea class="form-control" id = "warehouse_address" name = "warehouse_address" rows="3"></textarea>
                                     </div>
                                 </div>
 
@@ -205,10 +181,10 @@ session_start();
                             
 
                             <div class="mb-4">
-                                <input type="text" class="form-control" id = "user_contact_number" name = "user_contact_number" placeholder="Enter your contact number">
+                                <input type="text" class="form-control" id = "contact_number" name = "contact_number" placeholder="Enter the contact number">
                             </div>
                             <div id="sender">
-                                <button type="submit" class="btn btn-primary mb-2" id="button" onclick="reviewInfo()">Create account</button>
+                                <button type="submit" class="btn btn-primary mb-2" id="button">Add warehouse</button>
                             </div>
                         </form>
                     </div>

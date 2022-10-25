@@ -24,12 +24,21 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             if($result && mysqli_num_rows($result) > 0)
             {
                 $user_data = mysqli_fetch_assoc($result);
+                print_r($user_data);
 
                 if($user_data['password'] == $password)
                 {
-                    $_SESSION['user_name'] = $user_data['user_name'];
-                    header("Location: index.php");
-                    die;
+                    if($user_data['status'] == "active")
+                    {
+                        $_SESSION['user_name'] = $user_data['user_name'];
+                        header("Location: index.php");
+                        die;
+                    }
+                    else
+                    {
+                        echo '<script>alert("Your account is deactivated.Please contact the administrator.")</script>';
+                        
+                    }
                 }
             }   
         }

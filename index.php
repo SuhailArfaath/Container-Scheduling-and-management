@@ -20,7 +20,7 @@ $user_data = check_login($con);
     <div class="container-fluid">
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">C S M Test</a>
+            <a class="navbar-brand" href="#">C S M</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -35,9 +35,11 @@ $user_data = check_login($con);
                         Importer
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="products.php">Place order</a></li>
+                        <li><a class="dropdown-item" href="test.php">Place order</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="myorders.php">My orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addwarehouse.php">Add warehouse</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -46,7 +48,8 @@ $user_data = check_login($con);
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
-                        <li><a class="dropdown-item" href="received_orders.php">Shipping</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -67,18 +70,35 @@ $user_data = check_login($con);
                         <li><a class="dropdown-item" href="addusers.php">Add users</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="viewusers.php">View all users</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_harbor_stock.php">Add stock</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addharbour.php">Add a harbor</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
                     </ul>
                 </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="addusers.php">Container loading order</a></li>
+                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="viewusers.php">Sea shipping order</a></li>
+                        <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="viewusers.php">Truck shipping order</a></li>
+                        <li><a class="dropdown-item" href="index.php">Truck shipping order</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Manufacturer
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="man_received_orders.php">Export orders</a></li>
                     </ul>
                 </li>
             </ul>
@@ -96,7 +116,7 @@ $user_data = check_login($con);
     <div class="row justify-content-center mt-5">
         <div class="col-6">
             <h1 class="display-4 fs-2 text-center"><b>Container Management System</b></h1>
-            <h3 class="display-6 fs-2 text-center mt-5">Better container management. Better commerce.</p>
+            <h3 class="display-6 fs-2 text-center mt-5">Better container management, better commerce</p>
             <hr/>
             <div class="row justify-content-center">
                 <div class="col-8 mt-4">

@@ -5,28 +5,10 @@ include("connection.php");
 include("functions.php");
 
 $user_data = check_login($con);
+$user_id = $user_data['user_id'];
 
-if($_SERVER['REQUEST_METHOD'] == "GET")
-{
 
-        // Reading from the products table in the data base
-        $query = "select * from products";
 
-        $result = mysqli_query($con, $query);
-
-        if($result)
-        {
-            if($result && mysqli_num_rows($result) > 0)
-            {
-                $products_data = mysqli_fetch_all($result);
-            }
-        }
-    
-    else{
-        echo "problem in getting data";
-    }
-
-}
 
 
 ?>
@@ -37,25 +19,9 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link href="product_display.css" rel="stylesheet">
-    <style>
-        .container {
-            padding: 2rem 0rem;
-        }
-
-        h4 {
-            margin: 2rem 0rem 1rem;
-        }
-
-        .table-image {
-            td, th {
-                vertical-align: middle;
-            }
-        }
-    </style>
   </head>
   <body>
-  <div class="container-fluid">
+    <div class="container-fluid">
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">C S M</a>
@@ -150,129 +116,17 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
             </div>
         </div>
     </nav>
-    
-
-    <div class="row justify-content-center mt-1 mb-2">
-        <div class="col-6">
-            <form class="d-flex" role="search" action="searchresult.php" method="post">
-                <input class="form-control me-2" name="product_name" id="product_name" type="search" placeholder="Search by product name" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>        
-        </div>
-    </div>
       
-    <div class="row justify-content-center mt-1">
+    <div class="row justify-content-center mt-5">
         <div class="col-6">
-            <h1 class="display-4 fs-2 text-center"><b>Product list</b></h1>
+            <h1 class="display-4 fs-2 text-center"><b> No orders yet!</b></h1>
         </div>
     </div>
   
-    
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <table class="table table-image">
-                <thead>
-                    <tr>
-                    <th scope="col" class="text-center">Product Id</th>
-                    <th scope="col" class="text-center">Product image</th>
-                    <th scope="col" class="text-center">Product name</th>
-                    <th scope="col" class="text-center">Product type</th>
-                    <th scope="col" class="text-center">Stock left</th>
-                    <th scope="col" class="text-center">Price</th>
-                    <th scope="col" class="text-center">Exporter name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php for ($row = 0; $row < count($products_data); $row++) { ?>
-                    <tr>
-                    <th scope="row" class="text-center"><?php echo $products_data[$row][0]; ?></th>
-                    <td class="w-25 text-center">
-                        <img class="img" src="data:image/png;charset=utf8;base64,<?php echo base64_encode($products_data[$row][6]); ?>" width = "150px" height="150px">
-                    </td>
-                    <td class="text-center"><?php echo $products_data[$row][1]; ?></td>
-                    <td class="text-center"><?php echo $products_data[$row][3]; ?></td>
-                    <td class="text-center"><?php echo $products_data[$row][7]; ?></td>
-                    <td class="text-center"><?php echo "$",$products_data[$row][8]; ?></td>
-                    <td class="text-center"><?php echo $products_data[$row][10]; ?></td>
-                    </tr>
-                    <?php }?>
-                </tbody>
-                </table>   
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
+  
+      
 
       
-      
-      <script>
-        var check = 1;
-        function add_to_cart(product_id,product_name,
-                            product_brand,product_type,
-                            exporter_id,exporter_name)
-        {
-          if (check == 1)
-          {
-            localStorage.clear();
-            check = 2;
-          }
-          console.log(product_id,product_name,
-                            product_brand,product_type);
-
-        var quantity = parseInt(document.getElementById(String(product_id)).innerHTML);
-        console.log(quantity)
-        var product_data = {
-        "product_id"    : product_id,
-        "product_name"  : product_name,
-        "product_brand" : product_brand,
-        "product_type"  : product_type,
-        "quantity"      : quantity,
-        "exporter_id"   : exporter_id,
-        "exporter_name" : exporter_name
-        }
-
-        data = JSON.stringify(product_data);
-        // data = JSON.parse(data_crude);
-
-         localStorage.setItem(product_id, data);
-        //  console.log(JSON.parse(localStorage.getItem(7)));
-        }
-
-
-        function quantity_counter(operation,element_id)
-        {
-          // localStorage.clear();
-          // var i = localStorage.getItem(6);
-          // var obj = JSON.stringify(i);
-          // alert(JSON.stringify(i));
-          // console.log(obj);
-          value = parseInt(document.getElementById(String(element_id)).innerHTML);
-          if (operation > 0)
-          {
-            document.getElementById(String(element_id)).innerHTML = value + 1;
-          }
-          else
-          {
-            if(value > 0)
-            document.getElementById(String(element_id)).innerHTML = value - 1;
-            else
-            {
-              document.getElementById(String(element_id)).innerHTML = value;
-            }
-          }
-          
-        }
-        </script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   </body>
 </html>

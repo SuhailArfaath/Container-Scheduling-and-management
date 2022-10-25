@@ -5,26 +5,39 @@ include("connection.php");
 include("functions.php");
 
 $user_data = check_login($con);
+$search_flag = 0;
 
-if($_SERVER['REQUEST_METHOD'] == "GET")
+if($_SERVER['REQUEST_METHOD'] == "POST")
 {
-
+        $product_name = $_POST['product_name'];
         // Reading from the products table in the data base
-        $query = "select * from products";
+        $query = "select * from products where product_name = '{$product_name}'";
 
         $result = mysqli_query($con, $query);
 
-        if($result)
-        {
-            if($result && mysqli_num_rows($result) > 0)
-            {
-                $products_data = mysqli_fetch_all($result);
-            }
-        }
-    
-    else{
-        echo "problem in getting data";
-    }
+       
+           
+                if($result && mysqli_num_rows($result) > 0)
+                {
+                    $products_data = mysqli_fetch_all($result);
+                }
+            
+                else
+                {
+                    echo '<script>alert("No matches found! Search with a proper product name")</script>';
+                    $query = "select * from products";
+
+                    $result = mysqli_query($con, $query);
+            
+                    if($result)
+                    {
+                        if($result && mysqli_num_rows($result) > 0)
+                        {
+                            $products_data = mysqli_fetch_all($result);
+                        }
+                       
+                    }
+                }
 
 }
 
@@ -55,7 +68,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
     </style>
   </head>
   <body>
-  <div class="container-fluid">
+    <div class="container-fluid">
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">C S M</a>
@@ -150,8 +163,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
             </div>
         </div>
     </nav>
-    
-
+      
     <div class="row justify-content-center mt-1 mb-2">
         <div class="col-6">
             <form class="d-flex" role="search" action="searchresult.php" method="post">
@@ -160,10 +172,10 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
             </form>        
         </div>
     </div>
-      
+
     <div class="row justify-content-center mt-1">
         <div class="col-6">
-            <h1 class="display-4 fs-2 text-center"><b>Product list</b></h1>
+            <h1 class="display-4 fs-2 text-center"><b>Search results</b></h1>
         </div>
     </div>
   
@@ -203,6 +215,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
         </div>
     </div>
 
+   
 
 
 

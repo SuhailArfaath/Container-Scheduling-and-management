@@ -97,7 +97,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="addproducts.php">Add products</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="allproducts.php">View all products</a></li>
+                        <li><a class="dropdown-item" href="products.php">View all products</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -226,4 +226,3 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   </body>
 </html>
-

@@ -43,7 +43,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             (!empty($product_weight)))
         {
             // Saving to data base
-            $query = "insert into products (product_name,brand,type,product_barcode,product_weight,product_image,price,exporter_id,exporter_name) values ('$product_name','$brand','$type','$product_barcode','$product_weight','$imgContent','$price','$exporter_id','$exporter_name')";
+            $query = "insert into products (product_name,brand,type,product_barcode,product_weight,product_image,quantity,price,exporter_id,exporter_name) values ('$product_name','$brand','$type','$product_barcode','$product_weight','$imgContent',0,'$price','$exporter_id','$exporter_name')";
 
             mysqli_query($con, $query);
 
@@ -88,9 +88,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         Importer
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="products.php">Place order</a></li>
+                        <li><a class="dropdown-item" href="test.php">Place order</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="myorders.php">My orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addwarehouse.php">Add warehouse</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -99,6 +101,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -108,7 +112,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="addproducts.php">Add products</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="products.php">View all products</a></li>
+                        <li><a class="dropdown-item" href="allproducts.php">View all products</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -119,18 +123,35 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         <li><a class="dropdown-item" href="addusers.php">Add users</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="viewusers.php">View all users</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_harbor_stock.php">Add stock</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addharbour.php">Add a harbor</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
                     </ul>
                 </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="addusers.php">Container loading order</a></li>
+                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="viewusers.php">Sea shipping order</a></li>
+                        <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="viewusers.php">Truck shipping order</a></li>
+                        <li><a class="dropdown-item" href="index.php">Truck shipping order</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Manufacturer
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="man_received_orders.php">Export orders</a></li>
                     </ul>
                 </li>
             </ul>
