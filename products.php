@@ -164,17 +164,17 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
                                               
                               <div class="row text-center">
                                   <div class="col-4">
-                                    <button type="button" class="btn btn-success" onclick="quantity_counter(1,<?php echo $products_data[$row][0] ?>)">+</button>
+                                    <button type="button" class="btn btn-warning" onclick="quantity_counter(1,<?php echo $products_data[$row][0] ?>)">-</button>
                                   </div>
                                   <div class="col-4 text-center">
                                       <div class="row">
                                           <div class="col">
-                                            <p class="text-center p-0 m-0" name="quantity" id="<?php echo $products_data[$row][0] ?>">0</p>
+                                            <p class="text-center p-0 m-0" name="quantity" id="<?php echo $products_data[$row][0] ?>">1</p>
                                           </div>
                                       </div>
                                   </div>
                                   <div class="col-4">
-                                    <button type="button" class="btn btn-warning"  onclick="quantity_counter(-1, <?php echo $products_data[$row][0] ?>)">-</button>
+                                    <button type="button" class="btn btn-success"  onclick="quantity_counter(-1, <?php echo $products_data[$row][0] ?>)">+</button>
                                   </div>
                               </div>
                               <div class="row">
@@ -203,7 +203,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
       <footer class="footer">
         <div class=" text-center bg-light">
             <a href="checkout.php">
-                <button class="btn btn-success  m-2" type="button">Check out</button>
+                <button class="btn btn-success  m-2" type="button">Checkout</button>
             </a>
         </div>
       </footer>
