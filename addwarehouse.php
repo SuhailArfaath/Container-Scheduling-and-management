@@ -6,8 +6,23 @@ session_start();
 
     $user_data = check_login($con);
 
+    $get_harbors = "select harborId,harborName from harbors";
+
+    $result = mysqli_query($con, $get_harbors);
+    // print_r( $result);
+
+    if($result)
+    {
+        if($result && mysqli_num_rows($result) > 0)
+        {
+            $harbors_data = mysqli_fetch_all($result);
+            // print_r($harbors_data);
+        }
+    }
+
     if($_SERVER['REQUEST_METHOD'] == "POST")
     {
+        // print_r($_POST);
         // When the user clicks on the submit button
         $name     = $_POST['name'];
         $emailId      = $_POST['emailId'];
@@ -16,11 +31,15 @@ session_start();
         $contact_number= $_POST['contact_number'];
         $user_id = $user_data['user_id'];
 
+        $real_data = json_decode($_POST['total'],true);
+        $harborId = $real_data['harborId'];
+        echo $harborId;
+
         if((!empty($name)) && (!empty($emailId)) && (!empty($contact_name))&&
             (!empty($warehouse_address))&& (!empty($contact_number)))
         {
             // Saving to data base
-            $query = "insert into warehouses (Company_Id,name,emailId,contact_name,contact_number,warehouse_address) values ('$user_id','$name','$emailId','$contact_name','$contact_number','$warehouse_address')";
+            $query = "insert into warehouses (harbor_Id,name,emailId,contact_name,contact_number,warehouse_address) values ('$harborId','$name','$emailId','$contact_name','$contact_number','$warehouse_address')";
 
             mysqli_query($con, $query);
 
@@ -47,6 +66,7 @@ session_start();
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
+  <div class="container-fluid">
   <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">C S M</a>
@@ -76,7 +96,7 @@ session_start();
                         Exporter
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Received orders</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
@@ -100,13 +120,25 @@ session_start();
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="viewusers.php">View all users</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="add_harbor_stock.php">Add stock</a></li>
-                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addharbour.php">Add a harbor</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtrucks.php">Add trucks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtruckingcompanies.php">Add trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addship.php">Add ships</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addshippingcompanies.php">Add shipping company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_FFC.php">Add freight forwarding company</a></li>
                     </ul>
                 </li>
 
@@ -115,13 +147,29 @@ session_start();
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="index.php">Truck shipping order</a></li>
+                        <li><a class="dropdown-item" href="arrived_status.php">Ships arrival</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="truckingorder.php">Truck shipping order</a></li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Trucking and warehouse access
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="orders_trucking.php">Orders for trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_warehouse.php">Orders for warehouses</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_driver.php">Orders for drivers</a></li>
+                    </ul>
+                </li>
+                
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Manufacturer
@@ -141,26 +189,47 @@ session_start();
             </div>
         </div>
     </nav>
+</div>
     <div class="container mt-3">
 
         <div class="row justify-content-center">
             
             <div class="col-8">
-                <div class="card text-center mt-1 p-2">
+                <div class="card mt-1 p-2">
                     <div class="card-body"> 
                        <form method = "post">
                             <div class="mb-4">
-                                
-                                <input type="text" class="form-control"  id = "name" name = "name"  placeholder="Create the warehouse name">
+                                    <div class="dropdown">
+                                        <select class="form-select" aria-label="Default select example" onchange="setHarbor()" id="harbor">
+                                        <option selected>Choose harbor from the list</option>
+                                        <?php for ($row = 0; $row < count($harbors_data); $row++) { ?>
+                                            
+                                            <option value="<?php echo $harbors_data[$row][0];?>" >
+                                                <?php echo $harbors_data[$row][1]; ?>
+                                            </option>
+                                        <?php }?>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="exampleFormControlInput1" class="form-label">Create the warehouse name</label>
+
+                                <input type="text" class="form-control"  id = "name" name = "name"  placeholder="" >
                             </div>
                             <div class="mb-4">
-                                <input type="email" class="form-control" id = "emailId" name = "emailId" placeholder="Create email Id">
+                            <label for="exampleFormControlInput1" class="form-label">Create email Id</label>
+
+                                <input type="email" class="form-control" id = "emailId" name = "emailId" placeholder="">
                             </div>
 
                            
 
                             <div class="mb-4">
-                                <input type="text" class="form-control" id = "contact_name" name = "contact_name" placeholder="Enter the name of point of contact">
+                            <label for="exampleFormControlInput1" class="form-label">Enter the name of point of contact</label>
+
+                                <input type="text" class="form-control" id = "contact_name" name = "contact_name" placeholder="">
                             </div>
 
                             <div class="mb-4">
@@ -181,10 +250,14 @@ session_start();
                             
 
                             <div class="mb-4">
+                            <label for="exampleFormControlInput1" class="form-label">Enter the contact number</label>
+
                                 <input type="text" class="form-control" id = "contact_number" name = "contact_number" placeholder="Enter the contact number">
                             </div>
                             <div id="sender">
-                                <button type="submit" class="btn btn-primary mb-2" id="button">Add warehouse</button>
+                                <input type="hidden" name="total" id="poster" value="abc"/>  
+
+                                <button type="submit" onclick = "setJson()" class="btn btn-primary mb-2" id="button">Add warehouse</button>
                             </div>
                         </form>
                     </div>
@@ -195,6 +268,27 @@ session_start();
         
     </div>
     <script>
+         function setHarbor()
+        {
+            var subjectIdNode = document.getElementById('harbor');
+            harborId = subjectIdNode.options[subjectIdNode.selectedIndex].value;
+            console.log("The selected name=",harborId);
+            setJson();
+        }
+
+        function setJson()
+        {
+            var poster =  document.getElementById("poster");
+            var warehouse_data = {
+                    "harborId"    : harborId,
+                    }
+            json_data = JSON.stringify(warehouse_data);
+            poster.value = json_data;
+            console.log(poster.value);
+
+
+        }
+
         var checkAccountType = 0;
         var  user_data       = {}
         // the selector will match all input controls of type :checkbox

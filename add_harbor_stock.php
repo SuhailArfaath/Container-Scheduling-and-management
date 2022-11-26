@@ -41,7 +41,7 @@ echo "problem in getting data";
 $get = "select product_name,product_id from products where exporter_id = '{$user_id}'";
 
 $result = mysqli_query($con, $get);
-// print_r( $result);
+print_r( $result);
 
 if($result)
 {
@@ -59,17 +59,17 @@ echo "problem in getting data";
 
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {
-    // print_r($_POST);
-    $real_data = json_decode($_POST['total'],true);
-    $harborId = $real_data['harborId'];
-    $exporterId = $real_data['exporterId'];
-    $productId = $real_data['productId'];
-    $query = "insert into harbor_stock (harborId,productId,productQuantity,exporterId) values ('{$harborId}', '{$productId}', 0, '{$exporterId}')";
+    print_r($_POST);
+    // $real_data = json_decode($_POST['total'],true);
+    // $harborId = $real_data['harborId'];
+    // $exporterId = $real_data['exporterId'];
+    // $productId = $real_data['productId'];
+    // $query = "insert into harbor_stock_room (harborId,productId,productQuantity,exporterId) values ('{$harborId}', '{$productId}', 0, '{$exporterId}')";
 
-    mysqli_query($con, $query);
+    // mysqli_query($con, $query);
 
-    header("Location: add_harbor_stock.php");
-    die;
+    // header("Location: add_harbor_stock.php");
+    // die;
     // When the user clicks on the create account button
     // $harborName = $_POST['harbourName'];
     // $country  = $_POST['country'];
@@ -107,7 +107,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
   </head>
   <body>
   <div class="container-fluid">
-    <nav class="navbar navbar-expand-lg bg-light">
+  <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">C S M</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,7 +136,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         Exporter
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Received orders</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
@@ -160,13 +160,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="viewusers.php">View all users</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="add_harbor_stock.php">Add stock</a></li>
-                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addharbour.php">Add a harbor</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtrucks.php">Add trucks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtruckingcompanies.php">Add trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addship.php">Add ships</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addshippingcompanies.php">Add shipping company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_FFC.php">Add freight forwarding company</a></li>
                     </ul>
                 </li>
 
@@ -175,13 +187,29 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="index.php">Truck shipping order</a></li>
+                        <li><a class="dropdown-item" href="arrived_status.php">Ships arrival</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="truckingorder.php">Truck shipping order</a></li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Trucking and warehouse access
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="orders_trucking.php">Orders for trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_warehouse.php">Orders for warehouses</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_driver.php">Orders for drivers</a></li>
+                    </ul>
+                </li>
+                
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Manufacturer

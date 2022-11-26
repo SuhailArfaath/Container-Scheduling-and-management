@@ -44,6 +44,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     print_r($real_data);
 
 
+
+
     for ($x = 0; $x < count($real_data); $x++) {
         
         $id = $real_data[$x]['product_id'];
@@ -54,8 +56,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
         $exporter_id = $real_data[$x]['exporter_id'];
         $exporter_name = $real_data[$x]['exporter_name'];
         $warehouseId = $real_data[$x]['warehouseId'];
+        $status      = "Not loaded";
+        $containerId = 0;
         // echo $real_data[$x]['product_id'];
-        $query = "insert into orders (user_id,product_id,product_name,product_brand,product_type,quantity,exporter_id,exporter_name,warehouseId) values ('{$user_id}','{$id}','{$name}','{$brand}','{$type}','{$quantity}','{$exporter_id}','{$exporter_name}','{$warehouseId}')";
+        $query = "insert into orders (user_id,product_id,product_name,product_brand,product_type,quantity,exporter_id,exporter_name,warehouseId,status,containerId,orderDate) values ('{$user_id}','{$id}','{$name}','{$brand}','{$type}','{$quantity}','{$exporter_id}','{$exporter_name}','{$warehouseId}','{$status}','{$containerId}',CURDATE())";
 
         mysqli_query($con, $query);
         
@@ -64,7 +68,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     // $query = "insert into products (product_name,product_brand,product_type,quantity) values ('$product_name','$brand','$type','$product_barcode','$product_weight','$product_image')";
 
     // mysqli_query($con, $query);
-    header("Location: test.php");
+    header("Location: success.php");
     die;
     
 
@@ -114,7 +118,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         Exporter
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Received orders</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
@@ -138,13 +142,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="viewusers.php">View all users</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="add_harbor_stock.php">Add stock</a></li>
-                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addharbour.php">Add a harbor</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtrucks.php">Add trucks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtruckingcompanies.php">Add trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addship.php">Add ships</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addshippingcompanies.php">Add shipping company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_FFC.php">Add freight forwarding company</a></li>
                     </ul>
                 </li>
 
@@ -153,13 +169,29 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="index.php">Truck shipping order</a></li>
+                        <li><a class="dropdown-item" href="arrived_status.php">Ships arrival</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="truckingorder.php">Truck shipping order</a></li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Trucking and warehouse access
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="orders_trucking.php">Orders for trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_warehouse.php">Orders for warehouses</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_driver.php">Orders for drivers</a></li>
+                    </ul>
+                </li>
+                
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Manufacturer
@@ -179,10 +211,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             </div>
         </div>
     </nav>
+</div>
       
     <div class="row justify-content-center mt-5">
         <div class="col-6">
-            <h1 class="display-4 fs-2 text-center"><b>Container Management System</b></h1>
+            <h1 class="display-4 fs-2 text-center"><b>Order summary</b></h1>
         </div>
     </div>
     
@@ -192,8 +225,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
         {
 
             var quantity = document.getElementsByName("quantity").value;
-            var warehouseId = document.getElementById("checkbox").value;
+            var warehouseId = document.getElementById("warehouse").value;
             var poster = document.getElementById("poster");
+           
 
             data[0]['quantity'] = quantity;
             data[0]['warehouseId'] = warehouseId;
@@ -249,7 +283,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
       </script>
   
       
-      <h1 class="display-2 fs-3 ">Order summary</h1>
       <div class="row justify-content-center mt-4">
             <div class="col-6">
                 <table class="table">
@@ -257,7 +290,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         <tr>
                         <th scope="col">Product Id</th>
                         <th scope="col">Product Name</th>
-                        <th scope="col">Price</th>
+                        <th scope="col">Price (in USD)</th>
                         <th scope="col">Exporter Name</th>
                         </tr>
                     </thead>
@@ -283,24 +316,19 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-6">
-        <table class="table table-image">
-                <tbody>
-                    <?php for ($row = 0; $row < count($warehouse_data); $row++) { ?>
-                    <tr>
-                        <td class="text-center">
-                        <input class="text-center form-check-input" type="checkbox" value="<?php echo $warehouse_data[$row][0]; ?>"  id="checkbox" name="check_box">
-                        </td>                    
-                        <td class="text-left">
-                            <p><?php echo $warehouse_data[$row][2]; ?></p>
-                            <p> <b>Address:</b> <?php echo $warehouse_data[$row][6]; ?></p>
-                        </td>
-                    
-                    </tr>
-                    <?php }?>
-                </tbody>
-                </table>
-        </div>
+             <div class="col-4 p-2">
+                    <div class="dropdown">
+                    <select class="form-select" aria-label="Default select example"  onchange="setWarehouse()" id = "warehouse">
+                        <option selected>Choose warehouse from the list</option>
+                        <?php for ($row = 0; $row < count($warehouse_data); $row++) { ?>
+                            
+                            <option  name="warehouse" value="<?php echo $warehouse_data[$row][0]; ?>" >
+                                <?php echo $warehouse_data[$row][2]; ?>
+                            </option>
+                        <?php }?>
+                    </select>
+                    </div>                  
+            </div>
     </div>
       <script>
         showData();
@@ -316,7 +344,30 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             </div>
         </footer>
     </form>
-      
+      <script>
+        var warehouseId = 0;
+        function setWarehouse()
+        {
+            var subjectIdNode = document.getElementById('warehouse');
+            warehouseId = subjectIdNode.options[subjectIdNode.selectedIndex].value;
+            console.log("The selected name=",warehouseId);
+            setJson();
+        }
+
+        function setJson()
+        {
+            var poster =  document.getElementById("poster");
+            var warehouse_data = {
+                    "warehouseId"    : harborId
+                    }
+            json_data = JSON.stringify(warehouse_data);
+            poster.value = json_data;
+            // console.log(poster.value);
+
+
+        }
+
+      </script>
         
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   </body>

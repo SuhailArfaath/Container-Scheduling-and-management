@@ -55,15 +55,19 @@ session_start();
         <div class="row justify-content-center">
             
             <div class="col-8">
-                <div class="card text-center mt-1 p-2">
+                <div class="card mt-1 p-2">
                     <div class="card-body"> 
                        <form method = "post">
                             <div class="mb-4">
-                                <input type="email" class="form-control"  id = "username" name = "username"  placeholder="Create your username">
+                            <label for="exampleFormControlInput1" class="form-label">Create your username</label>
+
+                                <input type="text" class="form-control"  id = "username" name = "username"  placeholder="">
                             </div>
             
                             <div class="mb-4">
-                                <input type="password" class="form-control" id = "password" name = "password" placeholder="Create your password">
+                            <label for="exampleFormControlInput1" class="form-label">Create your password</label>
+
+                                <input type="password" class="form-control" id = "password" name = "password" placeholder="">
                             </div>
 
                             <div class="mb-2">
@@ -84,12 +88,44 @@ session_start();
                                             Importer Account
                                         </label>
                                     </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="FFC">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            FFC Account
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="driver">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Driver Account
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="Importer">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Dispatcher Account
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="Importer">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Accounting Account
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-check-input" id = "importer" type="checkbox"  name="account_type" onclick="setimport()" value="Importer">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Staff Account
+                                        </label>
+                                    </div>
                                 </div>
                                                             
                             </div>
 
                             <div class="mb-4">
-                                <input type="text" class="form-control" id = "user_company_name" name = "user_company_name" placeholder="Enter your company name">
+                            <label for="exampleFormControlInput1" class="form-label">Enter your company name</label>
+
+                                <input type="text" class="form-control" id = "user_company_name" name = "user_company_name" placeholder="">
                             </div>
 
                             <div class="mb-4">
@@ -110,7 +146,9 @@ session_start();
                             
 
                             <div class="mb-4">
-                                <input type="text" class="form-control" id = "user_contact_number" name = "user_contact_number" placeholder="Enter your contact number">
+                            <label for="exampleFormControlInput1" class="form-label">Enter your contact number</label>
+
+                                <input type="text" class="form-control" id = "user_contact_number" name = "user_contact_number" placeholder="">
                             </div>
                             <div id="sender">
                                 <button type="submit" class="btn btn-primary mb-2" id="button" onclick="reviewInfo()">Create account</button>

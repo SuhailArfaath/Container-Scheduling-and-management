@@ -7,6 +7,20 @@ $user_data = check_login($con);
 $user_id = $user_data['user_id'];
 
 
+$get_harbors = "select harborId,harborName from harbors";
+
+$result = mysqli_query($con, $get_harbors);
+// print_r( $result);
+
+if($result)
+{
+    if($result && mysqli_num_rows($result) > 0)
+    {
+        $harbors_data = mysqli_fetch_all($result);
+        // print_r($harbors_data);
+    }
+}
+
 $get_exporters = "select user_id,user_name from users where account_type = 'Exporter'";
 
 $result = mysqli_query($con, $get_exporters);
@@ -31,7 +45,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     print_r($_POST);
     $real_data = json_decode($_POST['total'],true);
     $code = $_POST['ISO6346_code'];
-    $exporterId = $real_data['exporterId'];
+    $sourceHarborId = $real_data['harborId'];
+    $destinationHarborId = "0000";
+    $capacity = 0;
+
     // echo $code;
 
     if(!empty($_FILES["image_file"]["name"])) { 
@@ -49,12 +66,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             $imgContent = addslashes(file_get_contents($image)); 
         }
     }
-
-    $query = "insert into containers (ISO6346_Code,ownerCompanyId,containerImage,sourceHarbor,destinationHarbor) values ('{$code}', '{$exporterId}','{$imgContent}',0,0)";
+    $onShip = "No";
+    $query = "insert into containers (ISO6346_Code,containerImage,sourceHarborId,destinationHarborId,onShip) values ('{$code}','{$imgContent}','{$sourceHarborId}','{$destinationHarborId}','{$onShip}')";
 
     mysqli_query($con, $query);
 
-    header("Location: addcontainer.php");
+    $query = "insert into containers_record (ISO6346_Code,containerImage,sourceHarborId,destinationHarborId,onShip) values ('{$code}','{$imgContent}','{$sourceHarborId}','{$destinationHarborId}','{$onShip}')";
+
+    mysqli_query($con, $query);
+
+    header("Location: successfully_added.php");
     die;
     // When the user clicks on the create account button
     // $harborName = $_POST['harbourName'];
@@ -93,7 +114,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
   </head>
   <body>
   <div class="container-fluid">
-    <nav class="navbar navbar-expand-lg bg-light">
+  <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">C S M</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,7 +143,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         Exporter
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Received orders</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
@@ -146,13 +167,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="viewusers.php">View all users</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="add_harbor_stock.php">Add stock</a></li>
-                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addharbour.php">Add a harbor</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtrucks.php">Add trucks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtruckingcompanies.php">Add trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addship.php">Add ships</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addshippingcompanies.php">Add shipping company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_FFC.php">Add freight forwarding company</a></li>
                     </ul>
                 </li>
 
@@ -161,13 +194,29 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="index.php">Truck shipping order</a></li>
+                        <li><a class="dropdown-item" href="arrived_status.php">Ships arrival</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="truckingorder.php">Truck shipping order</a></li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Trucking and warehouse access
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="orders_trucking.php">Orders for trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_warehouse.php">Orders for warehouses</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_driver.php">Orders for drivers</a></li>
+                    </ul>
+                </li>
+                
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Manufacturer
@@ -207,13 +256,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                             </div>
 
                             <div class="mb-4">
+                                <label for="exampleFormControlInput1" class="form-label">Assign to harbor: </label>
                                 <div class="dropdown">
-                                    <select class="form-select" aria-label="Default select example" onchange="setExporter()" id="exporter">
-                                        <option selected>Choose exporter from the list</option>
-                                        <?php for ($row = 0; $row < count($exporters_data); $row++) { ?>
+                                    <select class="form-select" aria-label="Default select example" onchange="setHarbor()" id="harbor">
+                                        <option selected>Choose harbor from the list</option>
+                                        <?php for ($row = 0; $row < count($harbors_data); $row++) { ?>
                                             
-                                            <option value="<?php echo $exporters_data[$row][0]; ?>" >
-                                                <?php echo $exporters_data[$row][1]; ?>
+                                            <option value="<?php echo $harbors_data[$row][0]; ?>" >
+                                                <?php echo $harbors_data[$row][1]; ?>
                                             </option>
                                         <?php }?>
                                     </select>
@@ -240,7 +290,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     </div>
 
     <script>
-        var exporterId = 0;
+        var harborId = 0;
         var container_ISO_code = document.getElementById('ISO6346_code').value;
         var productId = 0;
 
@@ -250,18 +300,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             console.log("The selected name=" + container_ISO_code);
 
         }
-        function setExporter()
+        function setHarbor()
         {
-            var subjectIdNode = document.getElementById('exporter');
-            exporterId = subjectIdNode.options[subjectIdNode.selectedIndex].value;
-            console.log("The selected name=" + exporterId);
+            var subjectIdNode = document.getElementById('harbor');
+            harborId = subjectIdNode.options[subjectIdNode.selectedIndex].value;
+            console.log("The selected name=" + harborId);
 
         }
         function setJson()
         {
             var poster =  document.getElementById("poster");
             var order_data = {
-                    "exporterId": parseInt(exporterId)
+                    "harborId": parseInt(harborId)
                     }
             json_data = JSON.stringify(order_data);
             poster.value = json_data;

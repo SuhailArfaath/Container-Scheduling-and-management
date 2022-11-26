@@ -6,6 +6,7 @@ include("functions.php");
 
 $user_data = check_login($con);
 $user_id = $user_data['user_id'];
+$checker = 0;
 
 if($_SERVER['REQUEST_METHOD'] == "GET")
 {
@@ -23,11 +24,17 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
             if($result && mysqli_num_rows($result) > 0)
             {
                 $orders_data = mysqli_fetch_all($result);
+                // if(count(orders_data) == 0)
+                // {
+                //     $checker = 1;
+                //     header("Location: noorder.php");
+                //     die; 
+                // }
             }
             else
             {
-                header("Location: addproducts.php");
-                die;
+                 header("Location: noorder.php");
+                die; 
             }
         }
     
@@ -78,7 +85,7 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
                         Exporter
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Received orders</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
@@ -102,13 +109,25 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="viewusers.php">View all users</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="add_harbor_stock.php">Add stock</a></li>
-                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addharbour.php">Add a harbor</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtrucks.php">Add trucks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtruckingcompanies.php">Add trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addship.php">Add ships</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addshippingcompanies.php">Add shipping company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_FFC.php">Add freight forwarding company</a></li>
                     </ul>
                 </li>
 
@@ -117,13 +136,29 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="index.php">Truck shipping order</a></li>
+                        <li><a class="dropdown-item" href="arrived_status.php">Ships arrival</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="truckingorder.php">Truck shipping order</a></li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Trucking and warehouse access
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="orders_trucking.php">Orders for trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_warehouse.php">Orders for warehouses</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_driver.php">Orders for drivers</a></li>
+                    </ul>
+                </li>
+                
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Manufacturer
@@ -143,37 +178,38 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
             </div>
         </div>
     </nav>
+</div>
       
-    <div class="row justify-content-center mt-5">
+    <div class="row justify-content-center mt-2">
         <div class="col-6">
-            <h1 class="display-4 fs-2 text-center"><b>Container Management System</b></h1>
+            <h1 class="display-4 fs-2 text-center"><b>Received orders</b></h1>
         </div>
     </div>
   
   
       
-
+    <div class="container">
       <div class="row mt-4">
-          <h1 class="display-4 fs-3 "><b>Your orders</b></h1>  
+
           <table class="table">
             <thead>
                 <tr>
-                <th scope="col">Order_id</th>
-                <th scope="col">Product_name</th>
-                <th scope="col">Product_brand</th>
-                <th scope="col">Product_type</th>
-                <th scope="col">Quantity</th>
+                <th scope="col" class="text-center">Order_id</th>
+                <th scope="col" class="text-center">Product_name</th>
+                <th scope="col" class="text-center">Product_brand</th>
+                <th scope="col" class="text-center">Product_type</th>
+                <th scope="col" class="text-center">Quantity</th>
                 </tr>
             </thead>
             <tbody>
             <?php for ($row = 0; $row < count($orders_data); $row++) {?>
               <tr>
-                <th scope="row"><?php echo $orders_data[$row][0] ?></th>
-                <td><?php echo $orders_data[$row][3] ?></td>
-                <td><?php echo $orders_data[$row][4] ?></td>
-                <td><?php echo $orders_data[$row][5] ?></td>
-                <td><?php echo $orders_data[$row][6] ?></td>
-                <td>
+                <th scope="row" class="text-center"><?php echo $orders_data[$row][0] ?></th>
+                <td class="text-center"><?php echo $orders_data[$row][3] ?></td>
+                <td class="text-center"><?php echo $orders_data[$row][4] ?></td>
+                <td class="text-center"><?php echo $orders_data[$row][5] ?></td>
+                <td class="text-center"><?php echo $orders_data[$row][6] ?></td>
+                <td class="text-center">
                     <a href="http://localhost/Container-Scheduling-and-management/loadingorder.php?oid=<?php echo $orders_data[$row][0]; ?>">
                     <button type="button" class="btn btn-danger"> Load   </button>   
                     </a>    
@@ -181,8 +217,9 @@ if($_SERVER['REQUEST_METHOD'] == "GET")
               </tr>
               <?php } ?>
             </tbody>
-          </table>     
+          </table>  
       </div>
+    </div>
       <footer class="footer">
         <div class=" text-center bg-light">
           <a href="index.php">

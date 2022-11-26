@@ -43,7 +43,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             (!empty($product_weight)))
         {
             // Saving to data base
-            $query = "insert into products (product_name,brand,type,product_barcode,product_weight,product_image,quantity,price,exporter_id,exporter_name) values ('$product_name','$brand','$type','$product_barcode','$product_weight','$imgContent',0,'$price','$exporter_id','$exporter_name')";
+            $query = "insert into products (product_name,brand,type,product_barcode,product_weight,product_image,price,exporter_id,exporter_name) values ('$product_name','$brand','$type','$product_barcode','$product_weight','$imgContent','$price','$exporter_id','$exporter_name')";
 
             mysqli_query($con, $query);
 
@@ -100,7 +100,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         Exporter
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Received orders</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Received orders</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="manufacturerorder.php">Order inventory</a></li>
                     </ul>
@@ -124,13 +124,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="viewusers.php">View all users</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="add_harbor_stock.php">Add stock</a></li>
-                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addharbour.php">Add a harbor</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addcontainer.php">Add container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="addmanufacturer.php">Add manufacturer</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtrucks.php">Add trucks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addtruckingcompanies.php">Add trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addship.php">Add ships</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="addshippingcompanies.php">Add shipping company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="adddrivers.php">Add driver</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="add_FFC.php">Add freight forwarding company</a></li>
                     </ul>
                 </li>
 
@@ -139,13 +151,29 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
                         Orders
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="received_orders.php">Load container</a></li>
+                        <li><a class="dropdown-item" href="received_loading_orders.php">Load container</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="shipping_orders.php">Sea shipping order</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="index.php">Truck shipping order</a></li>
+                        <li><a class="dropdown-item" href="arrived_status.php">Ships arrival</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="truckingorder.php">Truck shipping order</a></li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Trucking and warehouse access
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="orders_trucking.php">Orders for trucking company</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_warehouse.php">Orders for warehouses</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="orders_driver.php">Orders for drivers</a></li>
+                    </ul>
+                </li>
+                
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Manufacturer
@@ -165,6 +193,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
             </div>
         </div>
     </nav>
+</div>
+<div class="container-fluid">
 
     <div class="row justify-content-center mt-5">
         <div class="col-6">
@@ -176,40 +206,46 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
         <div class="col-6">
         <form method = "post" enctype="multipart/form-data">
             <div class="row">
-                <div class="mb-4">
-                    <input type="text" class="form-control" id="exampleFormControlInput1" name = "product_name" placeholder="Enter the product name">
+                <div class="mb-2">
+                    <label for="exampleFormControlInput1" class="form-label">Enter the product name</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" name = "product_name" placeholder="">
                 </div>
             </div>
             <div class="row">
-                <div class="mb-4">
-                    <input type="text" class="form-control" id="exampleFormControlInput1" name = "product_brand" placeholder="Enter the product brand">
+                <div class="mb-2">
+                    <label for="exampleFormControlInput1" class="form-label">Enter the product brand</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" name = "product_brand" placeholder="">
                 </div>
             </div>
             <div class="row">
-                <div class="mb-4">
-                    <input type="text" class="form-control" id="exampleFormControlInput1" name = "product_type" placeholder="Enter the product type">
+                <div class="mb-2">
+                    <label for="exampleFormControlInput1" class="form-label">Enter the product type</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" name = "product_type" placeholder="">
                 </div>
             </div>
             <div class="row">
-                <div class="mb-4">
-                    <input type="number" class="form-control" id="exampleFormControlInput1" name = "product_price" placeholder="Enter the product price">
+                <div class="mb-2">
+                    <label for="exampleFormControlInput1" class="form-label">Enter the product price</label>
+                    <input type="number" class="form-control" id="exampleFormControlInput1" name = "product_price" placeholder="">
                 </div>
             </div>
         </div>
 
         <div class="col-6">
             <div class="row">
-                <div class="mb-4">
-                    <input type="text" class="form-control" id="exampleFormControlInput1" name = "product_barcode" placeholder="Enter the product barcode">
+                <div class="mb-2">
+                    <label for="exampleFormControlInput1" class="form-label">Enter the product barcode</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" name = "product_barcode" placeholder="">
                 </div>
             </div>
             <div class="row">
-                <div class="mb-4">
+                <div class="mb-2">
+                    <label for="exampleFormControlInput1" class="form-label">Enter the product weight</label>
                     <input type="text" class="form-control" id="exampleFormControlInput1" name = "product_weight" placeholder="Enter the product weight">
                 </div>
             </div>
             <div class="row">
-                <div class="mb-3">
+                <div class="mb-2">
                     <label for="formFile" class="form-label">Choose the product image file</label>
                     <input class="form-control" type="file" id="formFile" name="image_file">
                 </div>
@@ -224,6 +260,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
     </div>
 
     </div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   </body>
 </html>
